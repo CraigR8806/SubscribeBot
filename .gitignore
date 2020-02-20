@@ -1,0 +1,5 @@
+/bin/mongoscripts/*
+/properties/app.properties
+/node_modules/*
+/data/*
+/logs/*
