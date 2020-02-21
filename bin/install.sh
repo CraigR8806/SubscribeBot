@@ -16,7 +16,7 @@ waitformongo(){
         sleep 1
     done
 }
-downloadTools(){
+downloadToolsRHEL(){
     if [ "$(sudo subscription-manager status | grep -oP "(?<=^Overall Status:).+" | tr -d " ")" != "Current" ];then
         echo "Please register your RHEL installation before continuing with this install"
         exit 1
@@ -33,8 +33,29 @@ downloadTools(){
         sudo yum install nodejs
     fi
 }
+downloadToolsDebian(){
+    sudo apt update
+    if [ -n "$(which mongo)" ] || [ -n "$(which mongod)" ];then
+        read  -p "Hmm.. Looks like mongo is already installed."$'\n'"Continuing with the installtion will remove any existing mongo database"$'\n'"located at $base_dir/data."$'\n'"Are you sure you want to continue?(y/n):" res
+        [ "$res" = "n" ] && echo "OK Exiting now!" && exit 1
+    else
+        sudo apt install -y software-properties-common dirmngr
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+        sudo add-apt-repository 'deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main'
+        sudo apt install -y mongodb-org
+    fi
+    if [ -z "$( which node)" ] || [ -z "$(which npm)" ];then
+        sudo apt install -y nodejs npm
+    fi
+}
 
-downloadTools
+release=$(cat /etc/*release | grep -P "^ID_LIKE=\"?[^\"]+" | awk -F= '{print $2}' | tr -d '\"')
+
+if [ "$release" = "fedora" ];then
+    downloadToolsRHEL
+elif [ "$release" = "debian" ];then
+    downloadToolsDebian
+fi
 
 mkdir -p $base_dir/data
 rm -rf $base_dir/data/*
