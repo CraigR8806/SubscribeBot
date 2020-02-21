@@ -41,7 +41,7 @@ downloadToolsDebian(){
     else
         sudo apt install -y software-properties-common dirmngr
         sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-        sudo add-apt-repository 'deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main'
+        sudo add-apt-repository 'deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main'
         sudo apt install -y mongodb-org
     fi
     if [ -z "$( which node)" ] || [ -z "$(which npm)" ];then
@@ -59,6 +59,8 @@ fi
 
 mkdir -p $base_dir/data
 rm -rf $base_dir/data/*
+
+mkdir -p $base_dir/logs
 
 mkdir -p $base_dir/bin/mongoscripts
 rm -rf $base_dir/bin/mongoscripts/*
