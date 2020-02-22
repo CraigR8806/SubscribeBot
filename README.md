@@ -30,21 +30,21 @@ To safely stop the application, run bin/stop.js
 
 One of the really neat features of this bot is that it allows you to easily define support for new sites<br>
 Site definitions are located within sites/<br>
-The required fields and functions are required for new site definitions<br>
-&nbsp;&nbsp;&nbsp;&nbsp;field {name} - This is the name of the site (This is used when a user queries the supported sites using !sb supported)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;field {urlpattern} - This is a regular expression that is used to determine if a user supplied link is associated with this site defnition<br>
-&nbsp;&nbsp;&nbsp;&nbsp;function {getRecords(link, file) return array} - This function defines how to scrape the site to extract the desired information<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;link - is the link that the user supplies that is intended to be scraped<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file - is a file that will be used as a temporary parking place for the HTML that is pulled from the site<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return array - the return value must be a JSON array containing the desired information from the site<br>
-&nbsp;&nbsp;&nbsp;&nbsp;function {getNotificationList(thisCheck, lastCheck) return array} - This function compares the current state of the site vs the previous state<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thisCheck - is a JSON array containing the current results of getRecords<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lastCheck - is a JSON array containing the previous results of getRecords<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return array - the return value must be a JSON array containing the records that are intended to be relayed back to the user<br>
-&nbsp;&nbsp;&nbsp;&nbsp;function {composeEmbeddedMessage:(sub, notificationList) return embeddedMessage - This function creates an embeded message from the supplied notificationList<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sub - this is the full subscription object that is stored in mongodb<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;notificationList - This is the value returned from getNotificationList<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return embeddedMessage - The return value must be a discord embedded message<br>
+The following fields and functions are required for new site definitions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**field {name}** - This is the name of the site (This is used when a user queries the supported sites using !sb supported)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**field {urlpattern}** - This is a regular expression that is used to determine if a user supplied link is associated with this site defnition<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**function {getRecords(link, file) return array}** - This function defines how to scrape the site to extract the desired information<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *link* * - is the link that the user supplies that is intended to be scraped<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *file* * - is a file that will be used as a temporary parking place for the HTML that is pulled from the site<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *return array* * - the return value must be a JSON array containing the desired information from the site<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**function {getNotificationList(thisCheck, lastCheck) return array}** - This function compares the current state of the site vs the previous state<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *thisCheck* * - is a JSON array containing the current results of getRecords<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *lastCheck* * - is a JSON array containing the previous results of getRecords<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *return array* * - the return value must be a JSON array containing the records that are intended to be relayed back to the user<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**function {composeEmbeddedMessage:(sub, notificationList) return embeddedMessage** - This function creates an embeded message from the supplied notificationList<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *sub* * - this is the full subscription object that is stored in mongodb<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *notificationList* * - This is the value returned from getNotificationList<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* *return embeddedMessage* * - The return value must be a discord embedded message<br>
 
 For reference, you can take a look at sites/craiglist.js to see how to properly compose a site definition
 
