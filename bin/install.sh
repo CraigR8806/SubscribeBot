@@ -7,8 +7,9 @@ readprop(){
     echo "$(grep -oP "(?<=^$1=).+" $base_dir/properties/app.properties)"
 }
 waitformongo(){
-    logStart=$(cat $base_dir/logs/mongo.log | grep -n "[initandlisten] MongoDB starting" | awk -F: '{print $1}' | tail -1)
-    
+    sleep 1
+    logStart=$(cat $base_dir/logs/mongo.log | grep -n "\[initandlisten\] MongoDB starting" | awk -F: '{print $1}' | tail -1)
+
     listening=false
     while [ "$listening" = "false" ];do
         logLength=$(wc -l $base_dir/logs/mongo.log | awk '{print $1}')
@@ -34,17 +35,18 @@ downloadToolsRHEL(){
     fi
 }
 downloadToolsDebian(){
-    sudo apt update
     if [ -n "$(which mongo)" ] || [ -n "$(which mongod)" ];then
         read  -p "Hmm.. Looks like mongo is already installed."$'\n'"Continuing with the installtion will remove any existing mongo database"$'\n'"located at $base_dir/data."$'\n'"Are you sure you want to continue?(y/n):" res
         [ "$res" = "n" ] && echo "OK Exiting now!" && exit 1
     else
+        sudo apt update
         sudo apt install -y software-properties-common dirmngr
         sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
         sudo add-apt-repository 'deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main'
         sudo apt install -y mongodb-org
     fi
     if [ -z "$( which node)" ] || [ -z "$(which npm)" ];then
+        sudo apt update
         sudo apt install -y nodejs npm
     fi
 }
@@ -78,12 +80,13 @@ nohup mongod --auth --port $(readprop mongo.port) --dbpath $base_dir/data >> $ba
 
 waitformongo
 
-mongo --port $(readprop mongo.port) $(readprop mongo.app.db) $base_dir/bin/mongoscripts/createAppUser.js -u $(readprop mongo.admin.username) -p $(readprop mongo.admin.password) --authenticationDatabase admin  > /dev/null 2>&1
+
+mongo --port $(readprop mongo.port) $(readprop mongo.app.db) -u $(readprop mongo.admin.username) -p $(readprop mongo.admin.password) --authenticationDatabase admin $base_dir/bin/mongoscripts/createAppUser.js > /dev/null 2>&1
 
 rm -rf $base_dir/node_modules
 
 cd $base_dir
-npm install
+[ "$1" != "-n" ] && npm install
 
 
 
