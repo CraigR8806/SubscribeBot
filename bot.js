@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 const { readproperties, getProperty } = require('./bin/util.js');
 const fs = require('fs');
 const Discord = require('discord.js');
-const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb');
 
 const client  = new Discord.Client();
 
@@ -17,7 +17,7 @@ function getCollection(mongo){
 }
 
 function getMongoConnection(){
-    return new MongoClient("mongodb://" + getProperty("mongo.app.user.username") + ":" + getProperty("mongo.app.user.password") + "@127.0.0.1:" + getProperty("mongo.port") + "/appdata?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true});
+    return MongoClient("mongodb://" + getProperty("mongo.app.user.username") + ":" + getProperty("mongo.app.user.password") + "@127.0.0.1:" + getProperty("mongo.port") + "/appdata?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true});
 }
 
 
@@ -25,8 +25,7 @@ client.on('ready', ()=>{
     console.log('Logged in as ${client.user.tag}!');
     setInterval(()=>{
         sites = loadSites();
-        let mongo = getMongoConnection();
-        mongo.connect((err)=>{
+        getMongoConnection().then((mongo)=>{
             if(err)console.log(err);
             let collection = getCollection(mongo);
             collection.find({}).toArray((err,res)=>{
@@ -67,11 +66,10 @@ client.on('message', (message)=>{
                 let site = sites.find((e)=>sub.link.match(e.urlpattern));
                 console.log(site);
                 if(site){
-                    let mongo = getMongoConnection();
-                    mongo.connect((err)=>{
+                    getMongoConnection().then((mongo)=>{
                         let collection = getCollection(mongo);
                         collection.find({"user.id":message.author.id}).toArray((err,res)=>{
-                           let userSubscriptions = res.map(e=>e);
+                            let userSubscriptions = res.map(e=>e);
                             let nameIndex = userSubscriptions.map((e)=>e.name).indexOf(sub.name);
                             let linkIndex = userSubscriptions.map((e)=>e.link).indexOf(sub.link);
                             if( nameIndex == -1 && linkIndex == -1){
@@ -102,8 +100,7 @@ client.on('message', (message)=>{
             let subscriptionName = cmd[2];
             
             if(subscriptionName){
-                let mongo = getMongoConnection();
-                mongo.connect((err)=>{
+                getMongoConnection().then((mongo)=>{
                     let collection = getCollection(mongo);
                     if(subscriptionName === "!all"){
                         collection.remove({"user.id":message.author.id});
@@ -117,8 +114,7 @@ client.on('message', (message)=>{
                 incorrect=true;
             }
         }else if(cmd[1] === "list"){
-            let mongo = getMongoConnection();
-            mongo.connect((err)=>{
+            getMongoConnection().then((mongo)=>{
                 let collection = getCollection(mongo);
                 collection.find({"user.id":message.author.id}).toArray((err,res)=>{
                     let userSubscriptions = res.map(e=>e);
