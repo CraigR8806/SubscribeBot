@@ -15,7 +15,7 @@ To install all of the necesary components for the bot to run, run bin/install.sh
 You may need to fiddle with getting the right version of mongodb-org, node and npm depending on your environment
 
 To verify that mongo installed properly, you can run:
-mongo --port <your port> -u <your app user username> -p <your app user password> --authenticationDatabase <your application database name>
+mongo --port \<your port\> -u \<your app user username\> -p \<your app user password\> --authenticationDatabase \<your application database name\>
 If you can properly authenticate with the designated user on the application database, mongo was successfully installed and configured
 
 At this point, you should be able to start the application
