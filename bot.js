@@ -26,7 +26,6 @@ client.on('ready', ()=>{
     setInterval(()=>{
         sites = loadSites();
         getMongoConnection().then((mongo)=>{
-            if(err)console.log(err);
             let collection = getCollection(mongo);
             collection.find({}).toArray((err,res)=>{
                 if(err)console.log(err);
@@ -87,7 +86,6 @@ client.on('message', (message)=>{
                                 message.channel.send(msg);
                             }
                         });
-                        if(err)console.log(err);
                     });
                 }else{
                     message.channel.send(message.author.username + " looks like the site associated with " + sub.link + " is not supported.\nTo see the currently supported sites, run: !sb supported");
