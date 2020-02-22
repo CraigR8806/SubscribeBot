@@ -1,6 +1,9 @@
 # SubscribeBot
 This is a discord bot that allows users to subscribe to different webpages.  When defined events occur, the user will get a discord message with information associated with the events.  (e.g. Events might be a new record added to the site, or a change of status to a record)
 
+------------------------------------------------------------------------------
+<h2 align="center">Installation</h2>
+
 This is mainly built for a RHEL enviornment and can most easily installed there.<br>
 Some tweaks may be required to get this into another distro, but I was able to successfully install this on a Raspberry PI 4 running Ubuntu 18.04.4 Arm64
 
@@ -25,8 +28,8 @@ The output for the discord bot will be recorded in logs/bot.log
 To safely stop the application, run bin/stop.js
 
 ------------------------------------------------------------------------------
----------------------- Defining New Sites ------------------------------------
-------------------------------------------------------------------------------
+<h2 align="center">Defining New Sites</h2>
+
 
 One of the really neat features of this bot is that it allows you to easily define support for new sites<br>
 Site definitions are located within sites/<br>
