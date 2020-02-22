@@ -24,14 +24,12 @@ function getMongoConnection(){
 client.on('ready', ()=>{
     console.log('Logged in as ${client.user.tag}!');
     setInterval(()=>{
-        console.log("Running diff");
         sites = loadSites();
         let mongo = getMongoConnection();
         mongo.connect((err)=>{
             if(err)console.log(err);
             let collection = getCollection(mongo);
             collection.find({}).toArray((err,res)=>{
-                console.log("in diff");
                 if(err)console.log(err);
                 let subscriptions = res.map(e=>e);
                 for(sub of subscriptions){
