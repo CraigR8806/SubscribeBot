@@ -17,7 +17,7 @@ function getCollection(mongo){
 }
 
 function getMongoConnection(){
-    return MongoClient("mongodb://" + getProperty("mongo.app.user.username") + ":" + getProperty("mongo.app.user.password") + "@127.0.0.1:" + getProperty("mongo.port") + "/appdata?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true});
+    return MongoClient("mongodb://" + getProperty("mongo.app.user.username") + ":" + getProperty("mongo.app.user.password") + "@localhost:" + getProperty("mongo.port") + "/appdata?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true});
 }
 
 
@@ -43,7 +43,9 @@ client.on('ready', ()=>{
                         }
                     }
                 }
+                mongo.close();
             });
+            console.log('here');
         });
     }, getProperty("discord.bot.interval.ms"));
 });
@@ -86,6 +88,7 @@ client.on('message', (message)=>{
                                 message.channel.send(msg);
                             }
                         });
+                        mongo.close();
                     });
                 }else{
                     message.channel.send(message.author.username + " looks like the site associated with " + sub.link + " is not supported.\nTo see the currently supported sites, run: !sb supported");
@@ -107,6 +110,7 @@ client.on('message', (message)=>{
                         collection.remove({"user.id":message.author.id,"name":subscriptionName});
                         message.channel.send(message.author.username + "'s subcription with name " + subscriptionName + " has been deleted!");
                     }
+                    mongo.close();
                 });
             }else{
                 incorrect=true;
@@ -121,6 +125,7 @@ client.on('message', (message)=>{
                         msg+=sub.name + " " + sub.link + "\n"
                     }
                     message.channel.send(msg);
+                    mongo.close();
                 });
             });
         }else if(cmd[1] === "supported"){
