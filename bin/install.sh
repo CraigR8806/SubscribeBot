@@ -30,6 +30,9 @@ downloadTools(){
     if [ -z "$( which node)" ] || [ -z "$(which npm)" ];then
         sudo apt-get update
         sudo apt-get install -y nodejs npm
+        sudo npm cache clean -f
+        sudo npm install -g -n
+        sudo n stable
     fi
 }
 
