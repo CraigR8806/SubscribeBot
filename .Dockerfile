@@ -14,7 +14,6 @@ RUN TZ="America/New_York" \
 	&& useradd -s /bin/bash -m cramage \
 	&& adduser cramage sudo \
     && echo "cramage ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
-    
 	&& su - cramage -c "\
         mkdir ~/node_projects;\
         cd ~/node_projects; \
@@ -24,5 +23,4 @@ RUN TZ="America/New_York" \
         cp properties/.app.properties properties/app.properties;\
         sed -ri 's%^(mongo\.admin\.password=).+%\1<adminpass>%' properties/app.properties;\
         sed -ri 's%^(mongo\.app\.user\.password=).+%\1<appuserpass>%' properties/app.properties;\
-        sed -ri 's%^(discord\.bot\.token=).+%\1<bottoken>%' properties/app.properties;\
-        bin/install.sh"
+        sed -ri 's%^(discord\.bot\.token=).+%\1<bottoken>%' properties/app.properties;"
