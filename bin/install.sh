@@ -22,7 +22,7 @@ downloadTools(){
         read  -p "Hmm.. Looks like mongo is already installed."$'\n'"Continuing with the installtion will remove any existing mongo database"$'\n'"located at $base_dir/data."$'\n'"Are you sure you want to continue?(y/n):" res
         [ "$res" = "n" ] && echo "OK Exiting now!" && exit 1
     else
-        wget -q0 - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
         sudo apt-get update
         sudo apt-get install -y mongodb-org      
